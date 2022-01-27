@@ -1,37 +1,7 @@
 import { Box, Button, Text, TextField, Image } from "@skynexui/components";
 import React from "react";
+import { useRouter } from "next/router";
 import appConfig from "../config.json";
-
-function GlobalStyle() {
-  return (
-    <style global jsx>{`
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-      }
-      body {
-        font-family: "Poppins", sans-serif;
-      }
-      /* App fit Height */
-      html,
-      body,
-      #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-      /* ./App fit Height */
-    `}</style>
-  );
-}
 
 function Title(props) {
   const Tag = props.tag || "h1";
@@ -51,9 +21,11 @@ function Title(props) {
 
 export default function PaginaInicial() {
   const [userName, setUserName] = React.useState("GustaJLemos");
+  const roteamento = useRouter();
+  // console.log(roteamento);
+
   return (
     <>
-      <GlobalStyle />
       {/* box content */}
       <Box
         styleSheet={{
@@ -88,6 +60,12 @@ export default function PaginaInicial() {
           {/* Formulário */}
           <Box
             as="form"
+            onSubmit={function (infosDoEvento) {
+              infosDoEvento.preventDefault();
+              console.log("Alguém submeteu o form");
+              // window.location.href = "/chat";
+              roteamento.push("/chat");
+            }}
             styleSheet={{
               display: "flex",
               flexDirection: "column",
@@ -111,7 +89,7 @@ export default function PaginaInicial() {
               {appConfig.name}
             </Text>
 
-            <input
+            {/* <input
               type="text"
               value={userName}
               onChange={function Handler(event) {
@@ -120,8 +98,16 @@ export default function PaginaInicial() {
                 // trocar o valor da variável
                 setUserName(valor);
               }}
-            />
-            {/* <TextField
+            /> */}
+
+            <TextField
+              value={userName}
+              onChange={function Handler(event) {
+                // onde está esse valor?
+                const valor = event.target.value;
+                // trocar o valor da variável
+                setUserName(valor);
+              }}
               fullWidth
               textFieldColors={{
                 neutral: {
@@ -131,7 +117,7 @@ export default function PaginaInicial() {
                   backgroundColor: appConfig.theme.colors.neutrals[800],
                 },
               }}
-            /> */}
+            />
             <Button
               type="submit"
               label="Entrar"
